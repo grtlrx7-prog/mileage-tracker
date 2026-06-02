@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mileage Tracker</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Mileage Tracker Dashboard</h1>
+
+<div class="card">
+    <h2>Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+</div>
+
+<div class="card">
+    <h2>Upload Google Timeline</h2>
+    <input type="file" id="file">
+    <button onclick="upload()">Upload</button>
+</div>
+
+<div class="card">
+    <h2>Analytics</h2>
+    <button onclick="loadAnalytics()">Load Summary</button>
+    <pre id="output"></pre>
+</div>
+
+<script>
+
+let token = "";
+
+async function login() {
+
+    const res = await fetch("/auth/login?username=" +
+        document.getElementById("username").value +
+        "&password=" +
+        document.getElementById("password").value,
+
+    { method: "POST" });
+
+    const data = await res.json();
+
+    token = data.access_token;
+
+    alert("Logged in!");
+}
+
+async function upload() {
+
+    const file = document.getElementById("file").files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    await fetch("/import/google-timeline", {
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        body: formData
+    });
+
+    alert("Uploaded!");
+}
+
+async function loadAnalytics() {
+
+    const res = await fetch("/analytics/summary", {
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    });
+
+    const data = await res.json();
+
+    document.getElementById("output").innerText =
+        JSON.stringify(data, null, 2);
+}
+
+</script>
+
+</body>
+</html>

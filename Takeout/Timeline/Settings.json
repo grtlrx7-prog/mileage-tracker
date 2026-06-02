@@ -1,0 +1,181 @@
+{
+  "createdTime": "2013-08-10T17:42:50.325Z",
+  "modifiedTime": "2026-04-12T12:02:53.076Z",
+  "deviceSettings": [{
+    "deviceTag": 1594826855,
+    "reportingEnabled": false,
+    "devicePrettyName": "CPH2529",
+    "platformType": "ANDROID",
+    "deviceCreationTime": "2026-04-12T11:52:31.186Z",
+    "latestLocationReportingSettingChange": {
+      "reportingEnabledModificationTime": "2026-04-12T11:52:31.186Z"
+    },
+    "androidOsLevel": 35,
+    "deviceSpec": {
+      "manufacturer": "OPPO",
+      "brand": "OPPO",
+      "product": "CPH2529",
+      "device": "OP56E8L1",
+      "model": "CPH2529",
+      "isLowRam": false
+    },
+    "deviceActiveness": {
+      "hasSavedTimelineData": true,
+      "observedPlaceVisitsFor30PercentOfTheLast7d": true
+    }
+  }, {
+    "deviceTag": -116558451,
+    "reportingEnabled": false,
+    "devicePrettyName": "CPH2521",
+    "platformType": "ANDROID",
+    "deviceCreationTime": "2025-12-23T21:45:21.931Z",
+    "latestLocationReportingSettingChange": {
+      "reportingEnabledModificationTime": "2025-12-23T21:45:21.931Z"
+    },
+    "androidOsLevel": 36,
+    "deviceSpec": {
+      "manufacturer": "OPPO",
+      "brand": "OPPO",
+      "product": "CPH2521",
+      "device": "OP56D3L1",
+      "model": "CPH2521",
+      "isLowRam": false
+    },
+    "deviceActiveness": {
+      "hasSavedTimelineData": true,
+      "observedPlaceVisitsFor30PercentOfTheLast7d": true
+    }
+  }, {
+    "deviceTag": 1252477938,
+    "reportingEnabled": false,
+    "devicePrettyName": "CPH2737",
+    "platformType": "ANDROID",
+    "deviceCreationTime": "2025-11-01T18:36:06.157Z",
+    "latestLocationReportingSettingChange": {
+      "reportingEnabledModificationTime": "2025-11-01T18:36:06.157Z"
+    },
+    "androidOsLevel": 36,
+    "deviceSpec": {
+      "manufacturer": "OPPO",
+      "brand": "OPPO",
+      "product": "CPH2737",
+      "device": "OP5F02L1",
+      "model": "CPH2737",
+      "isLowRam": false
+    },
+    "deviceActiveness": {
+      "hasSavedTimelineData": true,
+      "observedPlaceVisitsFor30PercentOfTheLast7d": true
+    }
+  }, {
+    "deviceTag": 116126541,
+    "reportingEnabled": false,
+    "devicePrettyName": "CPH2197",
+    "platformType": "ANDROID",
+    "deviceCreationTime": "2025-05-25T19:41:09.419Z",
+    "latestLocationReportingSettingChange": {
+      "reportingEnabledModificationTime": "2025-05-25T19:41:09.419Z"
+    },
+    "androidOsLevel": 33,
+    "deviceSpec": {
+      "manufacturer": "OPPO",
+      "brand": "OPPO",
+      "product": "CPH2197",
+      "device": "OP4F39L1",
+      "model": "CPH2197",
+      "isLowRam": false
+    },
+    "deviceActiveness": {
+      "hasSavedTimelineData": true
+    }
+  }, {
+    "deviceTag": 2112247898,
+    "reportingEnabled": false,
+    "devicePrettyName": "CPH2529",
+    "platformType": "ANDROID",
+    "deviceCreationTime": "2023-11-16T15:39:45.041Z",
+    "latestLocationReportingSettingChange": {
+      "reportingEnabledModificationTime": "2024-05-31T04:59:37.290Z"
+    },
+    "androidOsLevel": 35,
+    "deviceSpec": {
+      "manufacturer": "OPPO",
+      "brand": "OPPO",
+      "product": "CPH2529",
+      "device": "OP56E8L1",
+      "model": "CPH2529",
+      "isLowRam": false
+    },
+    "deviceActiveness": {
+      "hasSavedTimelineData": true
+    }
+  }, {
+    "deviceTag": -883235526,
+    "reportingEnabled": false,
+    "devicePrettyName": "CPH2521",
+    "platformType": "ANDROID",
+    "deviceCreationTime": "2023-11-10T12:37:18.887Z",
+    "latestLocationReportingSettingChange": {
+      "reportingEnabledModificationTime": "2024-05-31T04:13:43.097Z"
+    },
+    "androidOsLevel": 35,
+    "deviceSpec": {
+      "manufacturer": "OPPO",
+      "brand": "OPPO",
+      "product": "CPH2521",
+      "device": "OP56D3L1",
+      "model": "CPH2521",
+      "isLowRam": false
+    },
+    "deviceActiveness": {
+      "hasSavedTimelineData": true
+    }
+  }],
+  "hasReportedLocations": true,
+  "hasSetRetention": false,
+  "storeVisitControl": {
+    "enabled": false,
+    "updateTime": "2025-12-02T00:13:50.841864495Z"
+  },
+  "timelineEditUploadsControl": {
+    "enabled": true,
+    "updateTime": "2025-01-28T16:42:13.587880140Z"
+  },
+  "encryptedBackupsControls": {
+    "1252477938": {
+      "enabled": false
+    },
+    "1594826855": {
+      "enabled": true,
+      "updateTime": "2026-04-12T12:02:53.076646660Z"
+    },
+    "2112247898": {
+      "enabled": true,
+      "updateTime": "2025-05-25T20:29:02.191905790Z"
+    },
+    "-883235526": {
+      "enabled": true,
+      "updateTime": "2025-05-15T20:12:27.344087343Z"
+    },
+    "-116558451": {
+      "enabled": true,
+      "updateTime": "2026-03-16T10:40:08.185892389Z"
+    },
+    "116126541": {
+      "enabled": true,
+      "updateTime": "2025-05-25T20:16:24.805000085Z"
+    }
+  },
+  "retentionControl": {
+    "retentionWindowDays": 2147483647
+  },
+  "timelineEnabled": true,
+  "timelineDeletionTime": "2024-06-01T08:21:38.425Z",
+  "latestTimelineSettingChange": {
+    "timelineEnabledModificationTime": "2019-07-03T22:13:56.453Z"
+  },
+  "googleOpinionRewardsControl": {
+    "enabled": true,
+    "updateTime": "2024-12-14T10:20:05.408640245Z"
+  }
+}
