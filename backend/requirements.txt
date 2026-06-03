@@ -6,3 +6,4 @@ openpyxl
 requests
 geopy
 python-multipart
+psycopg2-binary==2.9.10
