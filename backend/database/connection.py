@@ -7,8 +7,15 @@ DATABASE_URL = os.getenv(
     "sqlite:///./backend/database/mileage.db"
 )
 
+connect_args = {}
+
+# SQLite needs special setting
+if DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+
 engine = create_engine(
-    DATABASE_URL
+    DATABASE_URL,
+    connect_args=connect_args
 )
 
 SessionLocal = sessionmaker(
@@ -22,9 +29,7 @@ Base = declarative_base()
 
 def get_db():
     db = SessionLocal()
-
     try:
         yield db
-
     finally:
         db.close()

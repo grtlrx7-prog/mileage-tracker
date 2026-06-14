@@ -1,45 +1,43 @@
 import streamlit as st
+import requests
 import pandas as pd
+import os
 
-from backend.parsers.sars_export import parse_timeline
-
-
-# =================================================
-# PAGE CONFIG
-# =================================================
+API_URL = os.getenv(
+    "API_URL",
+    "http://localhost:8000"
+)
 
 st.set_page_config(
     page_title="SARS Mileage Logbook",
     layout="wide"
 )
 
-
-# =================================================
-# TITLE
-# =================================================
-
 st.title("🚗 SARS Mileage Logbook System")
 
-st.write("One-click generation of SARS-ready travel reports.")
+st.write("Production-grade system connected to FastAPI backend")
 
 
-# =================================================
-# RUN BUTTON
-# =================================================
-
+# -----------------------------
+# GENERATE REPORT BUTTON
+# -----------------------------
 if st.button("🚀 Generate SARS Report"):
 
-    with st.spinner("Processing trips..."):
+    with st.spinner("Calling backend API..."):
 
-        parse_timeline()
+        response = requests.post(
+            f"{API_URL}/generate-report"
+        )
 
-    st.success("Export completed!")
+    if response.status_code == 200:
+        st.success("Report generated successfully!")
+    else:
+        st.error("Backend error occurred")
 
 
-# =================================================
+# -----------------------------
 # LOAD OUTPUT FILE
-# =================================================
-
+# -----------------------------
 try:
 
     df = pd.read_excel(
@@ -51,17 +49,16 @@ try:
 
     st.dataframe(df, use_container_width=True)
 
-    st.subheader("📈 Summary Stats")
+    st.subheader("📈 Summary")
 
     col1, col2, col3 = st.columns(3)
 
-    col1.metric("Total Trips", len(df))
-    col2.metric("Total KM", round(df["KM"].sum(), 2))
+    col1.metric("Trips", len(df))
+    col2.metric("KM", round(df["KM"].sum(), 2))
     col3.metric(
-        "Estimated Claim",
+        "Claim (ZAR)",
         f"R{round(df['Claim (ZAR)'].sum(), 2)}"
     )
 
 except Exception:
-
-    st.info("Run export to view data.")
+    st.info("No report yet — click Generate Report")

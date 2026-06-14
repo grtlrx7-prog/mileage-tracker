@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 import os
 
 from backend.database.connection import engine
@@ -20,57 +19,36 @@ app = FastAPI(
 
 
 # ---------------------------
-# DB INIT
+# DB INIT (SAFE VERSION)
 # ---------------------------
-Base.metadata.create_all(bind=engine)
+# ⚠️ Only runs when app starts, not on import crash-prone reload loops
+@app.on_event("startup")
+def startup():
+    Base.metadata.create_all(bind=engine)
 
 
 # ---------------------------
 # ROUTES
 # ---------------------------
-app.include_router(auth_router)
-app.include_router(trips_router)
-app.include_router(importer_router)
-app.include_router(exporter_router)
-app.include_router(analytics_router)
-app.include_router(sars_router)
+app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+app.include_router(trips_router, prefix="/trips", tags=["Trips"])
+app.include_router(importer_router, prefix="/import", tags=["Import"])
+app.include_router(exporter_router, prefix="/export", tags=["Export"])
+app.include_router(analytics_router, prefix="/analytics", tags=["Analytics"])
+app.include_router(sars_router, prefix="/sars", tags=["SARS"])
 
 
 # ---------------------------
 # API ROOT
 # ---------------------------
-@app.get("/api")
+@app.get("/")
 def root():
-    return {"status": "online"}
+    return {
+        "status": "online",
+        "service": "mileage-tracker-api"
+    }
 
 
 @app.get("/health")
 def health():
     return {"status": "healthy"}
-
-
-# ---------------------------
-# STATIC FRONTEND (SAFE)
-# ---------------------------
-if os.path.exists("backend/static"):
-    app.mount(
-        "/",
-        StaticFiles(directory="backend/static", html=True),
-        name="static"
-    )
-
-
-# ---------------------------
-# LOCAL RUN ONLY
-# ---------------------------
-if __name__ == "__main__":
-    import uvicorn
-
-    port = int(os.getenv("PORT", 8000))
-
-    uvicorn.run(
-        "backend.main:app",
-        host="0.0.0.0",
-        port=port,
-        reload=True
-    )

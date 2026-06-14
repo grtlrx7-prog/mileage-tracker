@@ -1,72 +1,68 @@
-import threading
+import streamlit as st
+import pandas as pd
 import os
-import tkinter as tk
-from tkinter import messagebox
 
 from backend.parsers.sars_export import parse_timeline
 
 
-def run_export(status_label, button):
+# =================================================
+# PAGE CONFIG (MUST BE FIRST STREAMLIT CALL)
+# =================================================
+st.set_page_config(
+    page_title="SARS Mileage Logbook",
+    layout="wide"
+)
+
+
+# =================================================
+# TITLE
+# =================================================
+st.title("🚗 SARS Mileage Logbook System")
+st.write("One-click generation of SARS-ready travel reports.")
+
+
+# =================================================
+# RUN EXPORT BUTTON
+# =================================================
+if st.button("🚀 Generate SARS Report"):
 
     try:
-        status_label.config(text="Running SARS export...")
-        button.config(state="disabled")
+        with st.spinner("Processing trips..."):
+            parse_timeline()
 
-        parse_timeline()
-
-        status_label.config(text="Done ✔")
-
-        messagebox.showinfo(
-            "SARS Export",
-            "Report generated successfully!"
-        )
-
-        os.startfile(os.path.join("backend", "exports"))
+        st.success("Export completed successfully!")
 
     except Exception as e:
-        status_label.config(text="Error ❌")
-        messagebox.showerror("Error", str(e))
-
-    finally:
-        button.config(state="normal")
+        st.error(f"Export failed: {str(e)}")
 
 
-def start(status_label, button):
-    threading.Thread(
-        target=run_export,
-        args=(status_label, button),
-        daemon=True
-    ).start()
+# =================================================
+# LOAD OUTPUT FILE SAFELY
+# =================================================
+FILE_PATH = "backend/exports/mileage_logbook.xlsx"
 
 
-def main():
+if os.path.exists(FILE_PATH):
 
-    app = tk.Tk()
-    app.title("SARS Mileage App")
-    app.geometry("420x220")
+    try:
+        df = pd.read_excel(FILE_PATH, sheet_name="Trips")
 
-    tk.Label(
-        app,
-        text="🚗 SARS Mileage System",
-        font=("Arial", 14, "bold")
-    ).pack(pady=15)
+        st.subheader("📊 Trip Overview")
+        st.dataframe(df, use_container_width=True)
 
-    status_label = tk.Label(app, text="Ready")
-    status_label.pack(pady=10)
+        st.subheader("📈 Summary Stats")
 
-    button = tk.Button(
-        app,
-        text="Generate SARS Report",
-        bg="#1F4E78",
-        fg="white",
-        width=25,
-        height=2,
-        command=lambda: start(status_label, button)
-    )
-    button.pack(pady=20)
+        col1, col2, col3 = st.columns(3)
 
-    app.mainloop()
+        col1.metric("Total Trips", len(df))
+        col2.metric("Total KM", round(df["KM"].sum(), 2))
+        col3.metric(
+            "Estimated Claim",
+            f"R{round(df['Claim (ZAR)'].sum(), 2)}"
+        )
 
+    except Exception as e:
+        st.error(f"Failed to load report: {str(e)}")
 
-if __name__ == "__main__":
-    main()
+else:
+    st.info("👉 No report found. Click 'Generate SARS Report' first.")
