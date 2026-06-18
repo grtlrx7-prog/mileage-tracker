@@ -7,22 +7,13 @@ DATABASE_URL = os.getenv(
     "sqlite:///./backend/database/mileage.db"
 )
 
-# Fix Render PostgreSQL URLs if needed
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace(
-        "postgres://",
-        "postgresql+psycopg://",
-        1
-    )
-
 print("=" * 60)
-print("DATABASE URL BEING USED:")
+print("DATABASE_URL DETECTED:")
 print(DATABASE_URL)
 print("=" * 60)
 
 connect_args = {}
 
-# SQLite needs special setting
 if DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
 
