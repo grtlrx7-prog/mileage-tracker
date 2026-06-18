@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import os
+
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "sqlite:///./backend/database/mileage.db"
@@ -10,7 +11,12 @@ print("\n")
 print("===================================")
 print("DATABASE CONNECTION")
 print("===================================")
-print("RAW URL:", DATABASE_URL)
+
+if "postgres" in DATABASE_URL:
+    print("DATABASE TYPE: POSTGRESQL")
+else:
+    print("DATABASE TYPE: SQLITE")
+
 print("===================================")
 print("\n")
 
