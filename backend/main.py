@@ -23,7 +23,23 @@ app = FastAPI(
 # ---------------------------
 # ⚠️ Only runs when app starts, not on import crash-prone reload loops
 @app.on_event("startup")
-def startup():
+async def startup_check():
+
+    db_url = os.getenv("DATABASE_URL")
+
+    print("\n")
+    print("===================================")
+    print("DATABASE STARTUP CHECK")
+    print("===================================")
+
+    if db_url:
+        print("DATABASE_URL FOUND")
+        print(db_url[:50] + "...")
+    else:
+        print("DATABASE_URL NOT FOUND")
+
+    print("===================================")
+    print("\n")
     Base.metadata.create_all(bind=engine)
 
 
