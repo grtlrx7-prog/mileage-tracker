@@ -6,7 +6,9 @@ from backend.database.models import User
 from backend.auth.security import verify_password, create_access_token
 from backend.auth.security import hash_password
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(
+    tags=["Auth"]
+)
 
 
 # -----------------------------

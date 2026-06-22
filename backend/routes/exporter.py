@@ -9,19 +9,14 @@ from backend.auth.security import get_current_user
 import io
 from openpyxl import Workbook
 
-
+# KEEP prefix ONLY here (clean design)
 router = APIRouter(
     prefix="/export",
     tags=["Export"]
 )
 
-
 CLAIM_RATE = 4.64
 
-
-# -----------------------------------
-# XLSX EXPORT (SARS READY)
-# -----------------------------------
 
 @router.get("/xlsx")
 def export_xlsx(
@@ -37,9 +32,7 @@ def export_xlsx(
 
     wb = Workbook()
 
-    # --------------------------
-    # SHEET 1: TRIPS
-    # --------------------------
+    # SHEET 1
     ws = wb.active
     ws.title = "Trips"
 
@@ -56,7 +49,6 @@ def export_xlsx(
     personal_km = 0
 
     for trip in trips:
-
         ws.append([
             trip.created_at.strftime("%Y-%m-%d"),
             trip.start_location,
@@ -72,9 +64,7 @@ def export_xlsx(
         else:
             personal_km += trip.kilometers
 
-    # --------------------------
-    # SHEET 2: SUMMARY
-    # --------------------------
+    # SHEET 2
     summary = wb.create_sheet("Summary")
 
     summary.append(["Metric", "Value"])
@@ -86,9 +76,7 @@ def export_xlsx(
         round(business_km * CLAIM_RATE, 2)
     ])
 
-    # --------------------------
     # RETURN FILE
-    # --------------------------
     output = io.BytesIO()
     wb.save(output)
     output.seek(0)
@@ -97,7 +85,6 @@ def export_xlsx(
         output,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={
-            "Content-Disposition":
-            "attachment; filename=sars_logbook.xlsx"
+            "Content-Disposition": "attachment; filename=sars_logbook.xlsx"
         }
     )

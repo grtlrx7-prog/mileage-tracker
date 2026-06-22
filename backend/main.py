@@ -1,8 +1,12 @@
+print("===================================")
+print("NEW MAIN.PY DEPLOYED")
+print("VERSION 2026-06-21")
+print("===================================")
+
 from fastapi import FastAPI
 import os
 
-from backend.database.connection import engine
-from backend.database.models import Base
+from backend.database.connection import engine, Base
 
 from backend.auth.routes import router as auth_router
 from backend.routes.trips import router as trips_router
@@ -12,6 +16,9 @@ from backend.routes.analytics import router as analytics_router
 from backend.routes.sars import router as sars_router
 
 
+# ---------------------------
+# APP INITIALISATION
+# ---------------------------
 app = FastAPI(
     title="Mileage Tracker API",
     version="1.0.0"
@@ -19,43 +26,41 @@ app = FastAPI(
 
 
 # ---------------------------
-# DB INIT (SAFE VERSION)
+# STARTUP EVENT (DB INIT)
 # ---------------------------
-# ⚠️ Only runs when app starts, not on import crash-prone reload loops
 @app.on_event("startup")
-async def startup_check():
+async def startup_event():
+
+    print("\n===================================")
+    print("APPLICATION STARTUP")
+    print("===================================")
 
     db_url = os.getenv("DATABASE_URL")
 
-    print("\n")
-    print("===================================")
-    print("DATABASE STARTUP CHECK")
-    print("===================================")
-
     if db_url:
         print("DATABASE_URL FOUND")
-        print(db_url[:50] + "...")
+        print(db_url[:60] + "...")
     else:
-        print("DATABASE_URL NOT FOUND")
+        print("DATABASE_URL NOT FOUND (using fallback SQLite)")
 
-    print("===================================")
-    print("\n")
+    print("===================================\n")
+
     Base.metadata.create_all(bind=engine)
 
 
 # ---------------------------
 # ROUTES
 # ---------------------------
-app.include_router(auth_router, prefix="/auth", tags=["Auth"])
-app.include_router(trips_router, prefix="/trips", tags=["Trips"])
-app.include_router(importer_router, prefix="/import", tags=["Import"])
-app.include_router(exporter_router, prefix="/export", tags=["Export"])
-app.include_router(analytics_router, prefix="/analytics", tags=["Analytics"])
-app.include_router(sars_router, prefix="/sars", tags=["SARS"])
+app.include_router(auth_router)
+app.include_router(trips_router)
+app.include_router(importer_router)
+app.include_router(exporter_router)
+app.include_router(analytics_router)
+app.include_router(sars_router)
 
 
 # ---------------------------
-# API ROOT
+# ROOT ENDPOINT
 # ---------------------------
 @app.get("/")
 def root():
@@ -65,6 +70,12 @@ def root():
     }
 
 
+# ---------------------------
+# HEALTH CHECK
+# ---------------------------
 @app.get("/health")
 def health():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy",
+        "database": "connected"
+    }

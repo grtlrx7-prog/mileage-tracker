@@ -7,20 +7,13 @@ DATABASE_URL = os.getenv(
     "sqlite:///./backend/database/mileage.db"
 )
 
-print("\n")
-print("===================================")
+print("\n===================================")
 print("DATABASE CONNECTION")
 print("===================================")
+print("RAW URL:", DATABASE_URL)
+print("===================================\n")
 
-if "postgres" in DATABASE_URL:
-    print("DATABASE TYPE: POSTGRESQL")
-else:
-    print("DATABASE TYPE: SQLITE")
-
-print("===================================")
-print("\n")
-
-# Render Postgres fix
+# FIX Render PostgreSQL driver
 if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace(
         "postgresql://",
@@ -30,6 +23,7 @@ if DATABASE_URL.startswith("postgresql://"):
 
 connect_args = {}
 
+# SQLite safety (local dev)
 if DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
 
