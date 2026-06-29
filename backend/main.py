@@ -1,9 +1,5 @@
-print("===================================")
-print("NEW MAIN.PY DEPLOYED")
-print("VERSION 2026-06-21")
-print("===================================")
-
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import os
 
 from backend.database.connection import engine, Base
@@ -16,66 +12,97 @@ from backend.routes.analytics import router as analytics_router
 from backend.routes.sars import router as sars_router
 
 
-# ---------------------------
-# APP INITIALISATION
-# ---------------------------
+# =====================================================
+# CREATE DATABASE TABLES
+# =====================================================
+
+Base.metadata.create_all(bind=engine)
+
+
+# =====================================================
+# FASTAPI
+# =====================================================
+
 app = FastAPI(
     title="Mileage Tracker API",
-    version="1.0.0"
+    description="AI Powered SARS Mileage Tracker",
+    version="2.0.0"
 )
 
 
-# ---------------------------
-# STARTUP EVENT (DB INIT)
-# ---------------------------
-@app.on_event("startup")
-async def startup_event():
+# =====================================================
+# CORS
+# =====================================================
 
-    print("\n===================================")
-    print("APPLICATION STARTUP")
-    print("===================================")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# =====================================================
+# STARTUP
+# =====================================================
+
+@app.on_event("startup")
+async def startup():
+
+    print("\n========================================")
+    print("Mileage Tracker API Started")
+    print("========================================")
 
     db_url = os.getenv("DATABASE_URL")
 
     if db_url:
-        print("DATABASE_URL FOUND")
-        print(db_url[:60] + "...")
+        print("Database Connected")
     else:
-        print("DATABASE_URL NOT FOUND (using fallback SQLite)")
+        print("WARNING: DATABASE_URL not found")
 
-    print("===================================\n")
-
-    Base.metadata.create_all(bind=engine)
+    print("========================================\n")
 
 
-# ---------------------------
-# ROUTES
-# ---------------------------
-app.include_router(auth_router)
-app.include_router(trips_router)
-app.include_router(importer_router)
-app.include_router(exporter_router)
-app.include_router(analytics_router)
-app.include_router(sars_router)
+# =====================================================
+# ROOT
+# =====================================================
 
-
-# ---------------------------
-# ROOT ENDPOINT
-# ---------------------------
 @app.get("/")
 def root():
     return {
+        "application": "Mileage Tracker API",
         "status": "online",
-        "service": "mileage-tracker-api"
+        "version": "2.0.0"
     }
 
 
-# ---------------------------
-# HEALTH CHECK
-# ---------------------------
+# =====================================================
+# HEALTH
+# =====================================================
+
 @app.get("/health")
 def health():
     return {
-        "status": "healthy",
-        "database": "connected"
+        "status": "healthy"
     }
+
+
+# =====================================================
+# INCLUDE ROUTERS
+# IMPORTANT:
+# Every router already has its own prefix.
+# DO NOT ADD PREFIXES HERE.
+# =====================================================
+
+app.include_router(auth_router)
+
+app.include_router(trips_router)
+
+app.include_router(importer_router)
+
+app.include_router(exporter_router)
+
+app.include_router(analytics_router)
+
+app.include_router(sars_router)
